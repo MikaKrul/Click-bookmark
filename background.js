@@ -38,7 +38,7 @@ function rebuildContextMenus() {
     // Aanmaken hoofdmenu-item
     chrome.contextMenus.create({
       id: "pagesaver-root",
-      title: "★ Bladwijzer opslaan in...",
+      title: "Save page in...",
       contexts: ["page"]
     }, () => {
       if (chrome.runtime.lastError) {
