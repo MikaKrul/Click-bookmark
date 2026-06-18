@@ -12,20 +12,23 @@ A lightweight, distraction-free browser extension that lets you instantly save a
 - **Dynamic Folder Tree:** Automatically fetches your native browser bookmark folders (including Bookmark Bar, Other Bookmarks, and nested subfolders).
 - **Subfolder Visual Depth:** Nested folders are beautifully indented using clean visual markers (`—`).
 - **Real-time Sync:** Dynamically syncs and rebuilds the menu whenever you add, rename, move, or delete folders in your browser's native bookmark manager.
+- **Settings Popup:** Configure your experience with a beautiful settings panel:
+  - **System Folders Toggle:** Show or hide standard roots (like *Bookmarks Bar* or *Other Bookmarks*) to only display your custom folders.
+  - **Save Notifications:** Toggle instant native notifications when a bookmark is successfully saved.
 - **Privacy-First & Lightweight:** No background tracking, no external storage, and no cloud databases. It uses Chrome's native API.
 
 ## Design Details
 
 The extension's interface and icon are tailored to match the default Helium and Chromium browser toolbars:
 - **Icon:** A geometric, outline-style star matching the exact `1.5px` stroke thickness used by the browser's native UI icons.
-- **Footprint:** Extremely low memory consumption since it runs on a simple, on-demand background service worker.
+- **Settings UI:** A premium, dark-mode configuration panel with gold accent highlights matching Chrome's native bookmark star color.
 
 ## Installation (Developer Mode)
 
 Since this extension is optimized for personal use, you can easily load it locally into your browser:
 
 1. Download the latest release to your computer and un-zip it.
-2. Open your browser and navigate to the Extensions page (`chrome://extensions`) or your specific browsers extention page.
+2. Open your browser and navigate to the Extensions page (`chrome://extensions`) or your specific browser's extension page.
 3. Enable **Developer mode** (usually a toggle switch in the top-right corner).
 4. Click on **Load unpacked** (top-left corner).
 5. Select the folder containing the extension files (where `manifest.json` is located).
@@ -34,7 +37,10 @@ Since this extension is optimized for personal use, you can easily load it local
 
 ```text
 ├── manifest.json    # Extension configuration and native permissions
-├── background.js    # Background service worker handling context menus & bookmark saving
-├── icon.png         # Icon
+├── background.js    # Background service worker handling context menus, storage, and notifications
+├── popup.html       # Beautiful settings popup panel UI
+├── popup.js         # Settings logic, storage management, and version rendering
+├── icon.png         # Geometric outline star icon
 ├── README.md        # Documentation
 └── privacy.md       # Privacy Policy
+```
