@@ -1,13 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "Click & Save Bookmark",
-  "version": "1.1.1",
+  "name": "Click & Bookmark",
+  "version": "1.2",
   "description": "Save pages to bookmarks with a single click from the context menu.",
   "permissions": [
     "contextMenus",
     "bookmarks",
-    "activeTab",
-    "sidePanel"
+    "activeTab"
   ],
   "background": {
     "service_worker": "background.js"
