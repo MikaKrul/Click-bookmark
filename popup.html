@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    :root {
+      --bg: #121214;
+      --card-bg: #1a1a1e;
+      --text: #e1e1e6;
+      --text-muted: #8d8d99;
+      --primary: #fbbf24; /* Golden yellow matching browser bookmark stars */
+      --primary-hover: #f59e0b;
+      --primary-glow: rgba(251, 191, 36, 0.15);
+    }
+    body {
+      width: 240px;
+      margin: 0;
+      padding: 16px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+    }
+    .header-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #29292e;
+    }
+    .app-icon {
+      width: 28px;
+      height: 28px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    }
+    .app-info {
+      display: flex;
+      flex-direction: column;
+    }
+    .app-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .app-subtitle {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+    .setting-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .setting-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      background: var(--card-bg);
+      border-radius: 8px;
+      border: 1px solid #29292e;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .setting-item:hover {
+      border-color: #383842;
+    }
+    .label-container {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      user-select: none;
+    }
+    .label-title {
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .label-desc {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+    /* Switch / Toggle styling */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 34px;
+      height: 20px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #3e3e4a;
+      transition: .2s;
+      border-radius: 20px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 14px;
+      width: 14px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .2s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: var(--primary);
+      box-shadow: 0 0 8px var(--primary-glow);
+    }
+    input:checked + .slider:before {
+      transform: translateX(14px);
+    }
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid #29292e;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="header-container">
+    <img src="icon.png" class="app-icon" alt="Click & Bookmark Icon">
+    <div class="app-info">
+      <span class="app-title">Click & Bookmark</span>
+      <span class="app-subtitle">Settings & Preferences</span>
+    </div>
+  </div>
+  <div class="setting-group">
+    <div class="setting-item">
+      <div class="label-container">
+        <span class="label-title">System Folders</span>
+        <span class="label-desc">Show Bookmarks Bar, etc.</span>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="show-system-folders">
+        <span class="slider"></span>
+      </label>
+    </div>
+    
+    <div class="setting-item">
+      <div class="label-container">
+        <span class="label-title">Save Notification</span>
+        <span class="label-desc">Show alert when saved</span>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="show-notifications">
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <span>Click & Bookmark</span>
+    <span id="version">v1.2.1</span>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

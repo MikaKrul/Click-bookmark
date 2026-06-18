@@ -19,6 +19,13 @@ chrome.bookmarks.onRemoved.addListener(() => debouncedRebuild());
 chrome.bookmarks.onChanged.addListener(() => debouncedRebuild());
 chrome.bookmarks.onMoved.addListener(() => debouncedRebuild());
 
+// Listen for settings changes to automatically rebuild the menu
+chrome.storage.onChanged.addListener((changes, areaName) => {
+  if (areaName === 'local') {
+    debouncedRebuild();
+  }
+});
+
 function debouncedRebuild() {
   if (rebuildTimeout) clearTimeout(rebuildTimeout);
   rebuildTimeout = setTimeout(() => {
@@ -36,16 +43,25 @@ function rebuildContextMenus() {
 
   let treeNodes = null;
   let removed = false;
+  let settings = null;
 
   function proceed() {
-    if (treeNodes && removed) {
-      buildMenus(treeNodes);
+    if (treeNodes && removed && settings) {
+      buildMenus(treeNodes, settings);
     }
   }
 
-  // Optimize speed: Fetch bookmarks and clear menus in parallel
+  // Optimize speed: Fetch bookmarks, clear menus, and load settings in parallel
   chrome.bookmarks.getTree((nodes) => {
     treeNodes = nodes;
+    proceed();
+  });
+
+  chrome.storage.local.get({
+    showSystemFolders: false,
+    showNotifications: true
+  }, (items) => {
+    settings = items;
     proceed();
   });
 
@@ -62,7 +78,7 @@ function finalizeRebuild() {
   }
 }
 
-function buildMenus(treeNodes) {
+function buildMenus(treeNodes, settings) {
   // Create main menu item
   chrome.contextMenus.create({
     id: "pagesaver-root",
@@ -76,12 +92,20 @@ function buildMenus(treeNodes) {
 
   const folderList = [];
   
-  // Traverse the tree to filter only folders, skipping system roots (1, 2, 3)
+  // Traverse the tree to filter only folders, checking the settings for system roots
   function extractFolders(nodes, depth = 0) {
     nodes.forEach(node => {
       if (!node.url && node.id !== "0") { 
         const isSystemRoot = node.id === "1" || node.id === "2" || node.id === "3";
-        if (!isSystemRoot) {
+        if (isSystemRoot) {
+          if (settings.showSystemFolders) {
+            folderList.push({
+              id: node.id,
+              title: node.title || "Unnamed folder",
+              depth: depth
+            });
+          }
+        } else {
           folderList.push({
             id: node.id,
             title: node.title || "Unnamed folder",
@@ -90,8 +114,14 @@ function buildMenus(treeNodes) {
         }
       }
       if (node.children) {
-        // Do not indent children of system root folders (keep depth at 0 for user's top-level folders)
-        const nextDepth = (node.id === "0" || node.id === "1" || node.id === "2" || node.id === "3") ? depth : depth + 1;
+        let nextDepth = depth;
+        if (node.id !== "0") {
+          const isSystemRoot = node.id === "1" || node.id === "2" || node.id === "3";
+          // If we show system folders, increment depth. If hidden, children start at depth 0.
+          if (!isSystemRoot || settings.showSystemFolders) {
+            nextDepth = depth + 1;
+          }
+        }
         extractFolders(node.children, nextDepth);
       }
     });
@@ -183,7 +213,20 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     }, (newBookmark) => {
       if (chrome.runtime.lastError) {
         console.error("Error saving bookmark:", chrome.runtime.lastError.message);
+        return;
       }
+
+      // Check if notifications are enabled before showing alert
+      chrome.storage.local.get({ showNotifications: true }, (items) => {
+        if (items.showNotifications) {
+          chrome.notifications.create({
+            type: "basic",
+            iconUrl: "icon.png",
+            title: "Saved Bookmark",
+            message: `Saved page: "${newBookmark.title || tab.title}"`
+          });
+        }
+      });
     });
   }
 });
