@@ -221,7 +221,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
         if (items.showNotifications) {
           chrome.notifications.create({
             type: "basic",
-            iconUrl: "icon.png",
+            iconUrl: "icons/icon-128.png",
             title: "Saved Bookmark",
             message: `Saved page: "${newBookmark.title || tab.title}"`
           });

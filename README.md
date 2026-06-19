@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="icon.png" alt="Logo" width="256" height="256">
+  <img src="/icons/icon-256.png" alt="Logo" width="256" height="256">
 </p>
 
 # Click & Bookmark
@@ -40,7 +40,13 @@ Since this extension is optimized for personal use, you can easily load it local
 ├── background.js    # Background service worker handling context menus, storage, and notifications
 ├── popup.html       # Beautiful settings popup panel UI
 ├── popup.js         # Settings logic, storage management, and version rendering
-├── icon.png         # Geometric outline star icon
 ├── README.md        # Documentation
-└── privacy.md       # Privacy Policy
+├── privacy.md       # Privacy Policy
+└── icons/           # Icon files for different sizes
+    ├── icon-16.png
+    ├── icon-32.png
+    ├── icon-48.png
+    ├── icon-128.png
+    ├── icon-256.png
+    └── icon-512.png
 ```
